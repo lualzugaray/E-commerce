@@ -1,64 +1,130 @@
-// Variables y constantes
 let productosDisponibles = [
-    { nombre: "Laptop", precio: 800 },
-    { nombre: "Teclado mecánico", precio: 100 },
-    { nombre: "Monitor de 27 pulgadas", precio: 250 },
+    { nombre: "Mouse Logitech G203 Lightsync", precio: 29, imagen: "img/logitechG203.jpg" },
+    { nombre: "Monitor Hikvision 27″", precio: 1049, imagen: "img/monitorHikvision.jpg" },
+    { nombre: "Notebook Gamer MSI GF63 Thin", precio: 250, imagen: "img/msiNotebook.jpg" },
 ];
-let carrito = [];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-// Función para mostrar productos
+
 function mostrarProductos() {
-    console.log("Productos Disponibles:");
+    let productosDiv = document.getElementById("productos");
+    productosDiv.innerHTML = "";
+
     for (let i = 0; i < productosDisponibles.length; i++) {
-        console.log(`${i + 1}. ${productosDisponibles[i].nombre} - $${productosDisponibles[i].precio}`);
+        let producto = productosDisponibles[i];
+
+        let productoHTML = document.createElement("div");
+        productoHTML.className = "col-md-4 mb-4";
+        productoHTML.innerHTML = `
+            <div class="card">
+                <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+                <div class="card-body">
+                    <h5 class="card-title">${producto.nombre}</h5>
+                    <p class="card-price">Precio: $${producto.precio}</p>
+                    </div>
+                    <button onclick="agregarAlCarrito(${i})" class="btn btn">Agregar al Carrito</button>
+                </div>
+            </div>
+        `;
+        productosDiv.appendChild(productoHTML);
     }
 }
 
-// Función para agregar productos al carrito
-function agregarAlCarrito() {
-    let seleccion = prompt("Ingrese el número del producto que desea agregar al carrito:");
-    if (seleccion >= 1 && seleccion <= productosDisponibles.length) {
-        carrito.push(productosDisponibles[seleccion - 1]);
-        console.log(`${productosDisponibles[seleccion - 1].nombre} ha sido agregado al carrito.`);
-        alert(`${productosDisponibles[seleccion - 1].nombre} ha sido agregado al carrito.`);
+function actualizarCarrito() {
+    let carritoButton = document.getElementById("carritoButton");
+    carritoButton.textContent = `Ver Carrito (${carrito.length})`;
+}
+
+function mostrarCarrito() {
+    let carritoDiv = document.getElementById("carritoContenido");
+    carritoDiv.innerHTML = "<h3>Carrito de Compras</h3>";
+
+    if (carrito.length === 0) {
+        carritoDiv.innerHTML += "<p>El carrito está vacío.</p>";
     } else {
-        console.log("Selección inválida.");
-        alert("Selección inválida.");
+        let tabla = document.createElement("table");
+        tabla.className = "table";
+
+        let encabezado = tabla.createTHead();
+        let filaEncabezado = encabezado.insertRow();
+        let nombresColumnas = ["Nombre", "Imagen", "Precio", "Eliminar"];
+        for (let nombreColumna of nombresColumnas) {
+            let th = document.createElement("th");
+            th.textContent = nombreColumna;
+            filaEncabezado.appendChild(th);
+        }
+
+        let cuerpoTabla = tabla.createTBody();
+
+        for (let i = 0; i < carrito.length; i++) {
+            let producto = carrito[i];
+
+            let fila = cuerpoTabla.insertRow();
+
+            let celdaNombre = fila.insertCell();
+            celdaNombre.textContent = producto.nombre;
+
+            let celdaImagen = fila.insertCell();
+            let imagen = document.createElement("img");
+            imagen.src = producto.imagen;
+            imagen.alt = producto.nombre;
+            imagen.style.maxHeight = "100px";
+            imagen.style.width = "auto";
+            celdaImagen.appendChild(imagen);
+
+            let celdaPrecio = fila.insertCell();
+            celdaPrecio.textContent = `$${producto.precio}`;
+
+            let celdaEliminar = fila.insertCell();
+            let botonEliminar = document.createElement("button");
+            botonEliminar.textContent = "Eliminar";
+            botonEliminar.className = "btn btn";
+            botonEliminar.onclick = function () {
+                eliminarDelCarrito(i);
+            };
+            celdaEliminar.appendChild(botonEliminar);
+        }
+
+        carritoDiv.appendChild(tabla);
+
+        let totalDiv = document.createElement("div");
+        let total = carrito.reduce((sum, producto) => sum + producto.precio, 0);
+        totalDiv.textContent = `Total de la compra: $${total}`;
+        carritoDiv.appendChild(totalDiv);
+
+        let confirmarCompraButton = document.createElement("button");
+        confirmarCompraButton.textContent = "Confirmar Compra";
+        confirmarCompraButton.className = "btn btn";
+        confirmarCompraButton.onclick = confirmarCompra;
+        carritoDiv.appendChild(confirmarCompraButton);
+ 
+        
     }
 }
 
-// Función para eliminar productos al carrito
-function eliminarDelCarrito() {
-    let index = prompt("Ingrese el número del producto que desea eliminar del carrito:");
-    if (index >= 1 && index <= carrito.length) {
-        let productoEliminado = carrito.splice(index - 1, 1)[0];
-        console.log(`${productoEliminado.nombre} ha sido eliminado del carrito.`);
-        alert(`${productoEliminado.nombre} ha sido eliminado del carrito.`);
-    } else {
-        console.log("Selección inválida.");
-        alert("Selección inválida.");
-    }
+function agregarAlCarrito(index) {
+    carrito.push(productosDisponibles[index]);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    actualizarCarrito();
+    mostrarCarrito();
 }
 
-// Función para vaciar el carrito
 function vaciarCarrito() {
     carrito = [];
-    console.log("El carrito ha sido vaciado.");
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    mostrarCarrito(); 
 }
 
-// Función para confirmar la compra
+function eliminarDelCarrito(index) {
+    console.log("Intentando eliminar:", index);
+    carrito.splice(index, 1);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    mostrarCarrito();
+    actualizarCarrito();
+}
+
 function confirmarCompra() {
-    let total = 0;
-    console.log("Carrito de Compras:");
-    for (let i = 0; i < carrito.length; i++) {
-        console.log(`${carrito[i].nombre} - $${carrito[i].precio}`);
-        total += carrito[i].precio;
-    }
-    console.log(`Total de la compra: $${total}`);
-    let confirmacion = confirm("¿Desea confirmar la compra?");
-    if (confirmacion) {
-        alert("Compra confirmada. Gracias por su compra.");
-    } else {
-        alert("Compra cancelada.");
-    }
+    alert("Compra confirmada. Gracias por tu compra.");
+
+    vaciarCarrito();
 }
