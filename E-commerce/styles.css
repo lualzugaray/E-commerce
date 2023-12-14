@@ -116,3 +116,64 @@ table, th, td {
 main {
     text-align: center;
 }
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 250px;
+    height: 100vh;
+}
+
+#loginForm {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+#loginForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#loginForm input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#loginForm button {
+    padding: 10px;
+    cursor: pointer;
+}
+.registro-container {
+    display: flex;
+    padding-top: 250px;
+    justify-content: center;
+    height: 100vh;
+}
+
+#registroForm {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+#registroForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#registroForm input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#registroForm button {
+    padding: 10px;
+    cursor: pointer;
+}

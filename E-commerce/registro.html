@@ -9,9 +9,8 @@
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
-
-    <title>Computienda</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>    
+    <title>Registro</title>
 </head>
 <body>
     <section id="navbar">
@@ -33,27 +32,22 @@
             </nav>
         </div>
     </section>
+    <div class="registro-container">
+        <!-- Contenido del formulario de registro -->
+        <form id="registroForm">
+            <div class="form-group">
+                <label for="newUsername">Nuevo Usuario:</label>
+                <input type="text" id="newUsername" name="newUsername" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Nueva Contraseña:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+            </div>
+            <button type="button" onclick="registrarUsuario()">Registrarse</button>
+            <a href="login.html">Iniciar sesion</a>
+        </form>
+    </div>
 
-    <header>
-        <img src="img/header.png" alt="Header Image" class="img-fluid">
-    </header>
-
-    <main class="container mt-4">
-        <h2>Productos</h2>
-        <div id="productos" class="row"></div>
-    </main>
-
-
-    <script src="script.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            mostrarProductos();
-        });
-    </script>
-    </body>
-    </html>
+    <script src="registro.js"></script>
+</body>
+</html>

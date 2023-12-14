@@ -5,6 +5,18 @@ let productosDisponibles = [
 ];
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+function verificarSesion() {
+    const usuarioLogeado = sessionStorage.getItem("usuarioLogeado");
+
+    if (!usuarioLogeado) {
+        // Si el usuario no ha iniciado sesión, puedes redirigir al inicio de sesión
+        // window.location.href = "login.html";
+
+        // O simplemente permitir que el usuario continúe sin iniciar sesión
+        console.log("Usuario no ha iniciado sesión, permitiendo acceso.");
+    }
+}
+
 
 function mostrarProductos() {
     let productosDiv = document.getElementById("productos");
@@ -97,8 +109,6 @@ function mostrarCarrito() {
         confirmarCompraButton.className = "btn btn";
         confirmarCompraButton.onclick = confirmarCompra;
         carritoDiv.appendChild(confirmarCompraButton);
- 
-        
     }
 }
 
@@ -112,11 +122,10 @@ function agregarAlCarrito(index) {
 function vaciarCarrito() {
     carrito = [];
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    mostrarCarrito(); 
+    mostrarCarrito();
 }
 
 function eliminarDelCarrito(index) {
-    console.log("Intentando eliminar:", index);
     carrito.splice(index, 1);
     localStorage.setItem("carrito", JSON.stringify(carrito));
     mostrarCarrito();
@@ -124,7 +133,16 @@ function eliminarDelCarrito(index) {
 }
 
 function confirmarCompra() {
-    alert("Compra confirmada. Gracias por tu compra.");
-
-    vaciarCarrito();
+    Swal.fire({
+        icon: 'success',
+        title: 'Compra confirmada',
+        text: '¡Gracias por tu compra!',
+    }).then(() => {
+        vaciarCarrito();
+    });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    verificarSesion();
+    mostrarProductos();
+});
